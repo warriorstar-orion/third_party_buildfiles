@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -46,6 +47,12 @@ cc_library(
         "zutil.h",
     ],
     hdrs = ["zlib.h"],
+    copts = select({
+        "@bazel_tools//src/conditions:darwin_x86_64": [
+            "-Wno-implicit-function-declaration",
+        ],
+        "//conditions:default": [],
+    }),
     includes = ["."],
 )
 
