@@ -1,0 +1,4 @@
+exports_files([
+  "fmtlib.BUILD",
+  "spdlog.BUILD",
+])
