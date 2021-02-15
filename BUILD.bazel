@@ -1,6 +1,7 @@
 exports_files([
   "fmtlib.BUILD",
   "libpng.BUILD",
+  "peglib.BUILD",
   "spdlog.BUILD",
   "zlib.BUILD",
 ])
