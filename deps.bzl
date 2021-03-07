@@ -16,12 +16,14 @@ def wso_deps():
         name = "fmtlib",
         build_file = "@wso_third_party_buildfiles//buildfiles:fmtlib.BUILD",
         strip_prefix = "fmt-7.0.3",
+        sha256 = "decfdf9ad274070fa85f26407b816f5a4d82205ae86bac1990be658d0795ea4d",
         urls = ["https://github.com/fmtlib/fmt/releases/download/7.0.3/fmt-7.0.3.zip"],
     )
 
     http_archive(
         name = "spdlog",
         build_file = "@wso_third_party_buildfiles//buildfiles:spdlog.BUILD",
+        sha256 = "f0114a4d3c88be9e696762f37a7c379619443ce9d668546c61b21d41affe5b62",
         strip_prefix = "spdlog-1.7.0",
         urls = ["https://github.com/gabime/spdlog/archive/v1.7.0.tar.gz"],
     )
@@ -124,6 +126,7 @@ def wso_deps():
         name = "cppcoro",
         build_file = "@wso_third_party_buildfiles//buildfiles:cppcoro.BUILD",
         strip_prefix = "cppcoro-a87e97fe5b6091ca9f6de4637736b8e0d8b109cf",
+        sha256 = "2711fbfe0980b2bdb5b95de65abe3aee40c902d790f2a844558a5c0a8159e770",
         urls = [
             "https://github.com/lewissbaker/cppcoro/archive/a87e97fe5b6091ca9f6de4637736b8e0d8b109cf.zip",
         ],
