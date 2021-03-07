@@ -1,0 +1,90 @@
+diff --git a/SDL2pp/Config.hh b/SDL2pp/Config.hh
+new file mode 100644
+index 0000000..48e3d5b
+--- /dev/null
++++ b/SDL2pp/Config.hh
+@@ -0,0 +1,36 @@
++/*
++  libSDL2pp - C++11 bindings/wrapper for SDL2
++  Copyright (C) 2014-2016 Dmitry Marakasov <amdmi3@amdmi3.ru>
++
++  This software is provided 'as-is', without any express or implied
++  warranty.  In no event will the authors be held liable for any damages
++  arising from the use of this software.
++
++  Permission is granted to anyone to use this software for any purpose,
++  including commercial applications, and to alter it and redistribute it
++  freely, subject to the following restrictions:
++
++  1. The origin of this software must not be misrepresented; you must not
++     claim that you wrote the original software. If you use this software
++     in a product, an acknowledgment in the product documentation would be
++     appreciated but is not required.
++  2. Altered source versions must be plainly marked as such, and must not be
++     misrepresented as being the original software.
++  3. This notice may not be removed or altered from any source distribution.
++*/
++
++#ifndef SDL2PP_CONFIG_HH
++#define SDL2PP_CONFIG_HH
++
++#define SDL2PP_MAJOR_VERSION 0
++#define SDL2PP_MINOR_VERSION 16
++#define SDL2PP_PATCH_VERSION 1
++
++#define SDL2PP_VERSION "0.16.1"
++
++#define SDL2PP_WITH_IMAGE
++#define SDL2PP_WITH_TTF
++#define SDL2PP_WITH_MIXER
++/* #undef SDL2PP_WITH_EXPERIMENTAL_OPTIONAL */
++
++#endif
+diff --git a/SDL2pp/Export.hh b/SDL2pp/Export.hh
+new file mode 100644
+index 0000000..4733c9b
+--- /dev/null
++++ b/SDL2pp/Export.hh
+@@ -0,0 +1,42 @@
++
++#ifndef SDL2PP_EXPORT_H
++#define SDL2PP_EXPORT_H
++
++#ifdef SDL2PP_STATIC_DEFINE
++#  define SDL2PP_EXPORT
++#  define SDL2PP_NO_EXPORT
++#else
++#  ifndef SDL2PP_EXPORT
++#    ifdef SDL2pp_EXPORTS
++        /* We are building this library */
++#      define SDL2PP_EXPORT __attribute__((visibility("default")))
++#    else
++        /* We are using this library */
++#      define SDL2PP_EXPORT __attribute__((visibility("default")))
++#    endif
++#  endif
++
++#  ifndef SDL2PP_NO_EXPORT
++#    define SDL2PP_NO_EXPORT __attribute__((visibility("hidden")))
++#  endif
++#endif
++
++#ifndef SDL2PP_DEPRECATED
++#  define SDL2PP_DEPRECATED __attribute__ ((__deprecated__))
++#endif
++
++#ifndef SDL2PP_DEPRECATED_EXPORT
++#  define SDL2PP_DEPRECATED_EXPORT SDL2PP_EXPORT SDL2PP_DEPRECATED
++#endif
++
++#ifndef SDL2PP_DEPRECATED_NO_EXPORT
++#  define SDL2PP_DEPRECATED_NO_EXPORT SDL2PP_NO_EXPORT SDL2PP_DEPRECATED
++#endif
++
++#if 0 /* DEFINE_NO_DEPRECATED */
++#  ifndef SDL2PP_NO_DEPRECATED
++#    define SDL2PP_NO_DEPRECATED
++#  endif
++#endif
++
++#endif /* SDL2PP_EXPORT_H */

@@ -1,7 +1,76 @@
-exports_files([
-  "fmtlib.BUILD",
-  "libpng.BUILD",
-  "peglib.BUILD",
-  "spdlog.BUILD",
-  "zlib.BUILD",
-])
+package(default_visibility = ["//visibility:public"])
+
+alias(
+    name = "dear_imgui",
+    actual = "@dear_imgui//:dear_imgui",
+)
+
+alias(
+    name = "dear_imgui_backend_opengl3",
+    actual = "@dear_imgui//:opengl3",
+)
+
+alias(
+    name = "dear_imgui_backend_sdl",
+    actual = "@dear_imgui//:sdl",
+)
+
+alias(
+    name = "fmtlib",
+    actual = "@fmtlib//:fmtlib",
+)
+
+alias(
+    name = "freetype",
+    actual = "@freetype//:freetype",
+)
+
+alias(
+    name = "glew",
+    actual = "@glew//:glew",
+)
+
+alias(
+    name = "libpng",
+    actual = "@libpng//:libpng",
+)
+
+alias(
+    name = "peglib",
+    actual = "@peglib//:peglib",
+)
+
+alias(
+    name = "sdl2",
+    actual = "@sdl2//:sdl2",
+)
+
+alias(
+    name = "sdl2_image",
+    actual = "@sdl2_image//:sdl2_image",
+)
+
+alias(
+    name = "sdl2_mixer",
+    actual = "@sdl2_mixer//:sdl2_mixer",
+)
+
+alias(
+    name = "sdl2_ttf",
+    actual = "@sdl2_ttf//:sdl2_ttf",
+)
+
+alias(
+    name = "sdl2pp",
+    actual = "@sdl2pp//:sdl2pp",
+)
+
+alias(
+    name = "spdlog",
+    actual = "@spdlog//:spdlog",
+)
+
+alias(
+    name = "zlib",
+    actual = "@zlib//:zlib",
+)
