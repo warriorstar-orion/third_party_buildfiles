@@ -31,7 +31,7 @@ http_archive(
 
 http_archive(
     name = "peglib",
-    build_file_content = "peglib.BUILD",
+    build_file = "peglib.BUILD",
     sha256 = "ac7e8750f7692929bd9c1230f104d1c065713dc231749b8b819dd96f5cf5d383",
     strip_prefix = "cpp-peglib-11ed83e46fb0268c22005a6b8a9f094f8ea7208c",
     urls = [

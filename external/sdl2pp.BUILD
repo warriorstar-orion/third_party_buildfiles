@@ -17,6 +17,7 @@ cc_library(
         "@sdl2_mixer",
         "@sdl2_ttf",
     ],
+    visibility = ["//visibility:public"],
 )
 
 cc_binary(

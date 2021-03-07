@@ -1,9 +1,10 @@
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 cc_library(
     name = "dear_imgui",
     srcs = glob(["*.cpp"]),
     hdrs = glob(["*.h"]),
+    visibility = ["//visibility:public"],
     deps = [
         "@glew",
         "@sdl2",
@@ -19,6 +20,7 @@ cc_library(
         "backends/imgui_impl_sdl.h",
     ],
     strip_include_prefix = "backends",
+    visibility = ["//visibility:public"],
     deps = [":dear_imgui"],
 )
 
@@ -31,6 +33,7 @@ cc_library(
         "backends/imgui_impl_opengl3.h",
     ],
     strip_include_prefix = "backends",
+    visibility = ["//visibility:public"],
     deps = [":dear_imgui"],
 )
 
