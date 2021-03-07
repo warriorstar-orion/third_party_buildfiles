@@ -1,6 +1,11 @@
 package(default_visibility = ["//visibility:public"])
 
 alias(
+    name = "cppcoro",
+    actual = "@cppcoro//:cppcoro",
+)
+
+alias(
     name = "dear_imgui",
     actual = "@dear_imgui//:dear_imgui",
 )

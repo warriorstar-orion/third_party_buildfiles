@@ -85,3 +85,7 @@ Cartographer Authors, and licensed under Apache-2.0.
 
 BUILD file provided by Google Cartographer, Copyright 2018 The Cartographer
 Authors, and licensed under Apache-2.0.
+
+**cppcoro** @ commit lewissbaker/cppcoro@a87e97fe5b6091ca9f6de4637736b8e0d8b109cf
+
+- `@wso_third_party_buildfiles//:cppcoro`

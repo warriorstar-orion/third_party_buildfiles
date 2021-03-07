@@ -122,3 +122,13 @@ http_archive(
         "https://github.com/libSDL2pp/libSDL2pp/archive/0.16.1.zip",
     ],
 )
+
+http_archive(
+    name = "cppcoro",
+    build_file = "cppcoro.BUILD",
+    sha256 = "2711fbfe0980b2bdb5b95de65abe3aee40c902d790f2a844558a5c0a8159e770",
+    strip_prefix = "cppcoro-a87e97fe5b6091ca9f6de4637736b8e0d8b109cf",
+    urls = [
+        "https://github.com/lewissbaker/cppcoro/archive/a87e97fe5b6091ca9f6de4637736b8e0d8b109cf.zip",
+    ],
+)
