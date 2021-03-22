@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 
 def wso_deps():
     http_archive(
@@ -54,7 +54,10 @@ def wso_deps():
         build_file = "@wso_third_party_buildfiles//buildfiles:freetype.BUILD",
         # We patch out some modules we don't use from freetype config file.
         patch_args = ["-p1"],
-        patches = ["freetype_config.patch"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:freetype_config.patch",
+            "@wso_third_party_buildfiles//patches:freetype_release_build.patch",
+        ],
         sha256 = "bf380e4d7c4f3b5b1c1a7b2bf3abb967bda5e9ab480d0df656e0e08c5019c5e6",
         strip_prefix = "freetype-2.9",
         urls = ["https://download.savannah.gnu.org/releases/freetype/freetype-2.9.tar.gz"],
@@ -63,6 +66,8 @@ def wso_deps():
     http_archive(
         name = "sdl2",
         build_file = "@wso_third_party_buildfiles//buildfiles:sdl2.BUILD",
+        # patch_args = ["-p1"],
+        # patches = ["@wso_third_party_buildfiles//patches:sdl2_macosx_config.patch"],
         sha256 = "e6a7c71154c3001e318ba7ed4b98582de72ff970aca05abc9f45f7cbdc9088cb",
         strip_prefix = "SDL2-2.0.8",
         urls = ["https://www.libsdl.org/release/SDL2-2.0.8.zip"],
@@ -104,6 +109,10 @@ def wso_deps():
         name = "dear_imgui",
         build_file = "@wso_third_party_buildfiles//buildfiles:dear_imgui.BUILD",
         sha256 = "522c69d98d3729e7a18490855a51ba3689b8504ca61d801e1aa3a88b7f1d5aa8",
+        patch_args = ["-p1"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:imgui_example_sdl_metal_include.patch",
+        ],
         strip_prefix = "imgui-1.81",
         urls = [
             "https://github.com/ocornut/imgui/archive/v1.81.zip",
@@ -114,7 +123,10 @@ def wso_deps():
         name = "sdl2pp",
         build_file = "@wso_third_party_buildfiles//buildfiles:sdl2pp.BUILD",
         patch_args = ["-p1"],
-        patches = ["libsdl2pp_generatedheaders.patch"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:sdl2pp_generatedheaders.patch",
+            "@wso_third_party_buildfiles//patches:sdl2pp_rawdefines.patch",
+        ],
         sha256 = "d6ffaa0c0156d3159930ac1e4df1121302b9f2e80c17c5a581e1a89e01ddd383",
         strip_prefix = "libSDL2pp-0.16.1",
         urls = [
@@ -130,4 +142,69 @@ def wso_deps():
         urls = [
             "https://github.com/lewissbaker/cppcoro/archive/a87e97fe5b6091ca9f6de4637736b8e0d8b109cf.zip",
         ],
+    )
+
+    http_archive(
+        name = "TGUI",
+        build_file = "@wso_third_party_buildfiles//buildfiles:TGUI.BUILD",
+        patch_args = ["-p1"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:tgui_config.patch",
+        ],
+        strip_prefix = "TGUI-0.9.1",
+        urls = [
+            "https://github.com/texus/TGUI/archive/v0.9.1.zip",
+        ],
+    )
+
+    http_archive(
+        name = "enet",
+        build_file = "@wso_third_party_buildfiles//buildfiles:enet.BUILD",
+        strip_prefix = "enet-1.3.17",
+        urls = [
+            "https://github.com/lsalzman/enet/archive/v1.3.17.zip",
+        ],
+        sha256 = "ef9ae51c0d827324c391b13950a85c159199b65294035a912ca1bc6e419805c1",
+    )
+
+    http_archive(
+        name = "enet-plus",
+        build_file = "@wso_third_party_buildfiles//buildfiles:enet_plus.BUILD",
+        strip_prefix = "enet-plus-0.1-alpha",
+        sha256 = "5936d3795e8901dcb1b64353055a86759d7a305f2bbd18913feac80f57164c75",
+        urls = [
+            "https://github.com/xairy/enet-plus/archive/v0.1-alpha.zip",
+        ],
+    )
+
+    # As nice as it is that zpl is a single-file header library, it is released
+    # as such on GitHub, *not* as an archive, so it cannot be used in the same
+    # places as a workspace made from an http_archive.
+    http_archive(
+        name = "zpl",
+        build_file = "@wso_third_party_buildfiles//buildfiles:zpl.BUILD",
+        sha256 = "745ca576369e3b1def1b3384a585ced150a5440f288c7e856c9ce0fce30a4e7e",
+        strip_prefix = "zpl-12.1.0",
+        urls = [
+            "https://github.com/zpl-c/zpl/archive/12.1.0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "librg",
+        build_file = "@wso_third_party_buildfiles//buildfiles:librg.BUILD",
+        strip_prefix = "librg-6.0.11",
+        sha256 = "6591d57f2f1b61e1684d7943b028fd2e32a54e98a51b577df4bc313765dfdbdd",
+        urls = [
+            "https://github.com/zpl-c/librg/archive/v6.0.11.zip",
+        ],
+    )
+
+    http_archive(
+        name = "Gwork",
+        build_file = "@wso_third_party_buildfiles//buildfiles:gwork.BUILD",
+        strip_prefix = "GWork-gwork",
+        urls = [
+            "https://github.com/billyquith/GWork/archive/refs/heads/gwork.zip",
+        ]
     )

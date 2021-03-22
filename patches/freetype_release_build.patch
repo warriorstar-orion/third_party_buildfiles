@@ -1,0 +1,24 @@
+diff --git a/devel/ftoption.h b/devel/ftoption.h
+index 1b4619e..0afbb6d 100644
+--- a/devel/ftoption.h
++++ b/devel/ftoption.h
+@@ -190,7 +190,7 @@ FT_BEGIN_HEADER
+   /*   Define this macro if you want to enable this `feature'.  See also   */
+   /*   the macro FT_CONFIG_OPTION_SYSTEM_ZLIB below.                       */
+   /*                                                                       */
+-#define FT_CONFIG_OPTION_USE_ZLIB
++// #define FT_CONFIG_OPTION_USE_ZLIB
+ 
+ 
+   /*************************************************************************/
+@@ -393,8 +393,8 @@ FT_BEGIN_HEADER
+   /*   Do not #undef these macros here since the build system might define */
+   /*   them for certain configurations only.                               */
+   /*                                                                       */
+-#define FT_DEBUG_LEVEL_ERROR
+-#define FT_DEBUG_LEVEL_TRACE
++// #define FT_DEBUG_LEVEL_ERROR
++// #define FT_DEBUG_LEVEL_TRACE
+ 
+ 
+   /*************************************************************************/

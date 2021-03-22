@@ -1,0 +1,16 @@
+diff --git a/examples/image.cc b/examples/image.cc
+index a0f5e22..8467ed4 100644
+--- a/examples/image.cc
++++ b/examples/image.cc
+@@ -45,9 +45,9 @@ int main(int, char*[]) try {
+ 	// Load sprite texture; sprite1 and sprite2 are actually the same
+ 	// however first one is loaded directly into texture, and second
+ 	// one is loaded through an intermediary surface
+-	Surface surf(TESTDATA_DIR "/test.png");
++	Surface surf("test.png");
+ 
+-	Texture sprite1(render, TESTDATA_DIR "/test.png");
++	Texture sprite1(render, "test.png");
+ 	Texture sprite2(render, surf);
+ 
+ 	sprite1.SetBlendMode(SDL_BLENDMODE_BLEND);

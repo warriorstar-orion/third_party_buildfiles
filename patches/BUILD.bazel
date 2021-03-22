@@ -1,0 +1,6 @@
+exports_files([
+    "freetype_config.patch",
+    "freetype_release_build.patch",
+    "libsdl2pp_generatedheaders.patch",
+    "tgui_config.patch",
+])

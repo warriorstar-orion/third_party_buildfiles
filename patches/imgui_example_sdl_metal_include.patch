@@ -1,0 +1,13 @@
+diff --git a/examples/example_sdl_metal/main.mm b/examples/example_sdl_metal/main.mm
+index efbccf4c..b1b32faa 100644
+--- a/examples/example_sdl_metal/main.mm
++++ b/examples/example_sdl_metal/main.mm
+@@ -5,7 +5,7 @@
+ 
+ #include "imgui.h"
+ #include "imgui_impl_sdl.h"
+-#include "imgui_impl_metal.h"
++#include "backends/imgui_impl_metal.h"
+ #include <stdio.h>
+ #include <SDL.h>
+ 

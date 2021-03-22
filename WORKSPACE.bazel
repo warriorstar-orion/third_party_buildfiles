@@ -1,1 +1,5 @@
 workspace(name = "wso_third_party_buildfiles")
+
+load("@wso_third_party_buildfiles//:deps.bzl", "wso_deps")
+
+wso_deps()

@@ -15,11 +15,15 @@ config_setting(
 
 cc_library(
     name = "sdl2_image",
-    srcs = glob(
-        ["*.c"],
-        exclude = ["showimage.c"],
-    ),
+    srcs = select({
+        "//conditions:default": glob(
+            ["*.c"],
+            exclude = ["showimage.c"],
+        ),
+        ":darwin": [],
+    }),
     hdrs = glob(["*.h"]),
+    includes = ["."],
     visibility = ["//visibility:public"],
     deps = [
         "@freetype",
@@ -29,13 +33,15 @@ cc_library(
         "//conditions:default": [],
         ":darwin": [":sdl2_image_objc"],
     }),
-    includes = ["."],
     alwayslink = 1,
 )
 
 objc_library(
     name = "sdl2_image_objc",
-    srcs = glob(["*.c"]),
+    srcs = glob(
+        ["*.c"],
+        exclude = ["showimage.c"],
+    ),
     hdrs = glob(["*.h"]),
     non_arc_srcs = ["IMG_ImageIO.m"],
     visibility = ["//visibility:public"],
