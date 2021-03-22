@@ -206,5 +206,20 @@ def wso_deps():
         strip_prefix = "GWork-gwork",
         urls = [
             "https://github.com/billyquith/GWork/archive/refs/heads/gwork.zip",
-        ]
+        ],
+    )
+
+    http_archive(
+        name = "com_google_absl",
+        sha256 = "8400c511d64eb4d26f92c5ec72535ebd0f843067515244e8b50817b0786427f9",
+        strip_prefix = "abseil-cpp-c512f118dde6ffd51cb7d8ac8804bbaf4d266c3a",
+        urls = ["https://github.com/abseil/abseil-cpp/archive/c512f118dde6ffd51cb7d8ac8804bbaf4d266c3a.zip"],
+    )
+
+    http_archive(
+        name = "entt",
+        strip_prefix = "entt-18832fcb3765e02e66b033a0cf723683762463c0",
+        urls = [
+            "https://github.com/skypjack/entt/archive/18832fcb3765e02e66b033a0cf723683762463c0.tar.gz",
+        ],
     )
