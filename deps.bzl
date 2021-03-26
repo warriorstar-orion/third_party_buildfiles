@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def wso_deps():
     http_archive(
@@ -221,5 +221,15 @@ def wso_deps():
         strip_prefix = "entt-18832fcb3765e02e66b033a0cf723683762463c0",
         urls = [
             "https://github.com/skypjack/entt/archive/18832fcb3765e02e66b033a0cf723683762463c0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "boost_ext_ut",
+        strip_prefix = "ut-1.1.8",
+        build_file = "@wso_third_party_buildfiles//buildfiles:boost_ext_ut.BUILD",
+        sha256 = "7530a966d901809fb6b6ad14e0a03424fde3a137039cbb69af9f9a11d2f662d3",
+        urls = [
+            "https://github.com/boost-ext/ut/archive/refs/tags/v1.1.8.zip",
         ],
     )
