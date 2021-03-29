@@ -1,23 +1,10 @@
-cc_library(
-    name = "ponder",
-    srcs = glob(["deps/ponder/src/*.cpp"]),
-    hdrs = glob([
-        "deps/ponder/include/ponder/*.hpp",
-        "deps/ponder/include/ponder/*.inl",
-        "deps/ponder/include/ponder/detail/*.hpp",
-        "deps/ponder/include/ponder/detail/*.inl",
-        "deps/ponder/include/ponder/uses/*.hpp",
-        "deps/ponder/include/ponder/uses/*.inl",
-        "deps/ponder/include/ponder/uses/detail/*.hpp",
-    ]),
-    defines = [
-        "PONDER_USING_LUA",
-    ],
-    includes = [
-        "deps/ponder/include",
-    ],
-    deps = ["@lua"],
-)
+REFLECTION_SOURCES = [
+    "source/gwork/source/Reflection.cpp",
+]
+
+REFLECTION_HEADERS = [
+    "source/gwork/include/Gwork/Reflection.h",
+]
 
 cc_library(
     name = "Gwork",
@@ -91,7 +78,6 @@ cc_library(
         "source/gwork/source/Gwork.cpp",
         "source/gwork/source/Hook.cpp",
         "source/gwork/source/InputHandler.cpp",
-        # "source/gwork/source/Reflection.cpp",
         "source/gwork/source/Skin.cpp",
         "source/gwork/source/Tooltip.cpp",
         # "source/platform/platforms/Allegro5Platform.cpp",
@@ -122,35 +108,6 @@ cc_library(
         # "source/samples/SFML2/SFML2Sample.cpp",
         # "source/samples/Software/SoftwareSample.cpp",
         # "source/samples/WindowCanvas/CrossPlatform.cpp",
-
-        # "source/test/source/Test.cpp",
-        # "source/test/source/api/Button.cpp",
-        # "source/test/source/api/Checkbox.cpp",
-        # "source/test/source/api/CollapsibleList.cpp",
-        # "source/test/source/api/ColorPicker.cpp",
-        # "source/test/source/api/ComboBox.cpp",
-        # "source/test/source/api/CrossSplitter.cpp",
-        # "source/test/source/api/GroupBox.cpp",
-        # "source/test/source/api/ImagePanel.cpp",
-        # "source/test/source/api/Label.cpp",
-        # "source/test/source/api/LabelMultiline.cpp",
-        # "source/test/source/api/ListBox.cpp",
-        # "source/test/source/api/MenuStrip.cpp",
-        # "source/test/source/api/Numeric.cpp",
-        # "source/test/source/api/PageControl.cpp",
-        # "source/test/source/api/ProgressBar.cpp",
-        # "source/test/source/api/Properties.cpp",
-        # "source/test/source/api/RadioButton.cpp",
-        # "source/test/source/api/ScrollControl.cpp",
-        # "source/test/source/api/Slider.cpp",
-        # "source/test/source/api/StatusBar.cpp",
-        # "source/test/source/api/TabControl.cpp",
-        # "source/test/source/api/TestAPI.cpp",
-        # "source/test/source/api/TextBox.cpp",
-        # "source/test/source/api/TreeControl.cpp",
-        # "source/test/source/api/Window.cpp",
-        # "source/test/source/reflection/ReflectButton.cpp",
-        # "source/test/source/reflection/TestReflect.cpp",
 
         # "source/util/source/ControlFactory/FilePicker_Factory.cpp",
         # "source/util/source/ControlFactory/Image_Factory.cpp",
@@ -256,7 +213,6 @@ cc_library(
         "source/gwork/include/Gwork/Gwork.h",
         "source/gwork/include/Gwork/Hook.h",
         "source/gwork/include/Gwork/InputHandler.h",
-        # "source/gwork/include/Gwork/Reflection.h",
         "source/gwork/include/Gwork/Skin.h",
         "source/gwork/include/Gwork/Skins/Simple.h",
         "source/gwork/include/Gwork/Skins/TexturedBase.h",
@@ -296,10 +252,6 @@ cc_library(
         "source/platform/platforms/DebugBreak.h",
         # "source/platform/renderers/OpenGL/DebugFont/FontData.h",
 
-        # "source/test/include/Gwork/Test/Test.h",
-        # "source/test/include/Gwork/Test/TestAPI.h",
-        # "source/test/include/Gwork/Test/TestReflect.h",
-        
         # "source/util/include/Gwork/Util/ControlFactory.h",
         # "source/util/include/Gwork/Util/ImportExport.h",
         # "source/util/source/ImportExport/DesignerFormat.h",
@@ -327,26 +279,58 @@ cc_library(
     includes = [
         "source/gwork/include",
         "source/platform/include",
-        # "source/test/include",
         # "source/util/include",
     ],
+    visibility = ["//visibility:public"],
     deps = [
-        # ":ponder",
+        # "@ponder",
         "@sdl2",
         "@sdl2_image",
         "@sdl2_ttf",
     ],
-    visibility = ["//visibility:public"],
 )
 
 cc_library(
     name = "testing",
-    hdrs = [
-
-    ],
     srcs = [
-
-    ]
+        "source/test/source/Test.cpp",
+        "source/test/source/api/Button.cpp",
+        "source/test/source/api/Checkbox.cpp",
+        "source/test/source/api/CollapsibleList.cpp",
+        "source/test/source/api/ColorPicker.cpp",
+        "source/test/source/api/ComboBox.cpp",
+        "source/test/source/api/CrossSplitter.cpp",
+        "source/test/source/api/GroupBox.cpp",
+        "source/test/source/api/ImagePanel.cpp",
+        "source/test/source/api/Label.cpp",
+        "source/test/source/api/LabelMultiline.cpp",
+        "source/test/source/api/ListBox.cpp",
+        "source/test/source/api/MenuStrip.cpp",
+        "source/test/source/api/Numeric.cpp",
+        "source/test/source/api/PageControl.cpp",
+        "source/test/source/api/ProgressBar.cpp",
+        "source/test/source/api/Properties.cpp",
+        "source/test/source/api/RadioButton.cpp",
+        "source/test/source/api/ScrollControl.cpp",
+        "source/test/source/api/Slider.cpp",
+        "source/test/source/api/StatusBar.cpp",
+        "source/test/source/api/TabControl.cpp",
+        "source/test/source/api/TestAPI.cpp",
+        "source/test/source/api/TextBox.cpp",
+        "source/test/source/api/TreeControl.cpp",
+        "source/test/source/api/Window.cpp",
+        "source/test/source/reflection/ReflectButton.cpp",
+        "source/test/source/reflection/TestReflect.cpp",
+    ],
+    hdrs = [
+        "source/test/include/Gwork/Test/Test.h",
+        "source/test/include/Gwork/Test/TestAPI.h",
+        "source/test/include/Gwork/Test/TestReflect.h",
+    ],
+    includes = [
+        "source/test/include",
+    ],
+    deps = [":Gwork"],
 )
 
 cc_binary(
@@ -355,8 +339,12 @@ cc_binary(
     data = glob([
         "source/gwork/resource/*.*",
     ]),
+    defines = [
+        "GWK_SAMPLE_RESOURCE_DIR=\\\".\\\"",
+    ],
     deps = [
         ":Gwork",
+        ":testing",
         "@sdl2",
         "@sdl2_ttf",
     ],

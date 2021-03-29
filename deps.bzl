@@ -203,6 +203,10 @@ def wso_deps():
     http_archive(
         name = "Gwork",
         build_file = "@wso_third_party_buildfiles//buildfiles:gwork.BUILD",
+        patch_args = ["-p1"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:gwork_sdl2_highdpi.patch",
+        ],
         strip_prefix = "GWork-gwork",
         urls = [
             "https://github.com/billyquith/GWork/archive/refs/heads/gwork.zip",

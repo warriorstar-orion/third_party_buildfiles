@@ -1,0 +1,52 @@
+diff --git a/source/platform/renderers/SDL2/SDL2.cpp b/source/platform/renderers/SDL2/SDL2.cpp
+index 0fa374e4..b35a88c4 100644
+--- a/source/platform/renderers/SDL2/SDL2.cpp
++++ b/source/platform/renderers/SDL2/SDL2.cpp
+@@ -32,7 +32,9 @@ Font::Status SDL2::LoadFont(const Font& font)
+     }
+     else
+     {
+-        Gwk::Log::Write(Log::Level::Error, "Font file not found: %s", filename.c_str());
++        Gwk::Log::Write(Log::Level::Error, "Unable to load font: %s", filename.c_str());
++        Gwk::Log::Write(Log::Level::Error, "%s", TTF_GetError());
++
+         return Font::Status::ErrorFileNotFound;
+     }
+ }
+@@ -209,7 +211,12 @@ void SDL2::RenderText(const Gwk::Font& font, Gwk::Point pos, const Gwk::String&
+ 
+     int w, h;
+     SDL_QueryTexture(texture, nullptr, nullptr, &w, &h);
+-    const SDL_Rect dest = { pos.x,pos.y, w,h };
++    const SDL_Rect dest = {
++        static_cast<int>(pos.x),
++        static_cast<int>(pos.y),
++        static_cast<int>(Scale() * w),
++        static_cast<int>(Scale() * h)
++    };
+ 
+     SDL_RenderCopy(m_renderer, texture, nullptr, &dest);
+ 
+@@ -222,7 +229,7 @@ Gwk::Point SDL2::MeasureText(const Gwk::Font& font, const Gwk::String& text)
+         return Gwk::Point(0, 0);
+ 
+     SDL2FontData& fontData = m_lastFont->second;
+-    
++
+     int w,h;
+     TTF_SizeUTF8(fontData.tFont.get(), text.c_str(), &w,&h);
+ 
+@@ -237,7 +244,12 @@ void SDL2::StartClip()
+     // is inverted vertically. See: https://github.com/billyquith/GWork/issues/18
+     // Deal with backwards compatibility for now.
+ #if SDL_VERSION_ATLEAST(2, 0, 5)
+-    const SDL_Rect clip = { rect.x, rect.y, rect.w, rect.h };
++    const SDL_Rect clip = {
++        static_cast<int>(rect.x * Scale()),
++        static_cast<int>(rect.y * Scale()),
++        static_cast<int>(rect.w * Scale()),
++        static_cast<int>(rect.h * Scale())
++    };
+ #else
+     int w, h;
+     SDL_GetRendererOutputSize(SDL_GetRenderer(m_window), &w, &h);
