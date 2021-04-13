@@ -66,11 +66,13 @@ def wso_deps():
     http_archive(
         name = "sdl2",
         build_file = "@wso_third_party_buildfiles//buildfiles:sdl2.BUILD",
-        # patch_args = ["-p1"],
-        # patches = ["@wso_third_party_buildfiles//patches:sdl2_macosx_config.patch"],
-        sha256 = "e6a7c71154c3001e318ba7ed4b98582de72ff970aca05abc9f45f7cbdc9088cb",
-        strip_prefix = "SDL2-2.0.8",
-        urls = ["https://www.libsdl.org/release/SDL2-2.0.8.zip"],
+        patch_args = ["-p1"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:sdl2_macosx_config.patch"
+        ],
+        strip_prefix = "SDL2-2.0.14",
+        sha256 = "2c1e870d74e13dfdae870600bfcb6862a5eab4ea5b915144aff8d75a0f9bf046",
+        urls = ["https://www.libsdl.org/release/SDL2-2.0.14.zip"],
     )
 
     http_archive(
