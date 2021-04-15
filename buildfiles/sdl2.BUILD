@@ -36,6 +36,7 @@ SOURCE_HEADERS = [
     "src/SDL_assert_c.h",
     "src/SDL_dataqueue.h",
     "src/SDL_error_c.h",
+    "src/SDL_hints_c.h",
     "src/SDL_internal.h",
     "src/audio/SDL_audio_c.h",
     "src/audio/SDL_audiodev_c.h",
@@ -61,12 +62,17 @@ SOURCE_HEADERS = [
     "src/events/default_cursor.h",
     "src/haptic/SDL_haptic_c.h",
     "src/haptic/SDL_syshaptic.h",
+    "src/hidapi/hidapi/hidapi.h",
+    "src/joystick/controller_type.h",
     "src/joystick/SDL_gamecontrollerdb.h",
     "src/joystick/SDL_joystick_c.h",
     "src/joystick/SDL_sysjoystick.h",
+    "src/joystick/usb_ids.h",
+    "src/joystick/hidapi/SDL_hidapijoystick_c.h",
     "src/libm/math_libm.h",
     "src/libm/math_private.h",
     "src/locale/SDL_syslocale.h",
+    "src/misc/SDL_sysurl.h",
     "src/power/SDL_syspower.h",
     "src/render/SDL_sysrender.h",
     "src/sensor/SDL_sensor_c.h",
@@ -106,6 +112,7 @@ SOURCE_HEADERS = [
     "src/video/dummy/SDL_nullvideo.h",
     "src/video/khronos/vulkan/vk_platform.h",
     "src/video/khronos/vulkan/vulkan.h",
+    "src/video/khronos/vulkan/vulkan_core.h",
     "src/video/yuv2rgb/yuv_rgb.h",
     "src/video/yuv2rgb/yuv_rgb_sse_func.h",
     "src/video/yuv2rgb/yuv_rgb_std_func.h",
@@ -240,6 +247,7 @@ HEADERS = [
     "include/SDL_keyboard.h",
     "include/SDL_keycode.h",
     "include/SDL_loadso.h",
+    "include/SDL_locale.h",
     "include/SDL_log.h",
     "include/SDL_main.h",
     "include/SDL_messagebox.h",
@@ -256,6 +264,7 @@ HEADERS = [
     "include/SDL_revision.h",
     "include/SDL_rwops.h",
     "include/SDL_scancode.h",
+    "include/SDL_sensor.h",
     "include/SDL_shape.h",
     "include/SDL_stdinc.h",
     "include/SDL_surface.h",
@@ -273,6 +282,7 @@ HEADERS = [
 
 DARWIN_HEADERS = [
     "include/SDL_config_macosx.h",
+    "include/SDL_metal.h",
 
     # Despite being built with Vulkan and OpenGL disabled, these files are
     # referenced directly from the remaining necessary source files.
@@ -357,12 +367,11 @@ DARWIN_SOURCE_HEADERS = [
     "src/video/cocoa/SDL_cocoashape.h",
     "src/video/cocoa/SDL_cocoavideo.h",
     "src/video/cocoa/SDL_cocoawindow.h",
-
-    # Despite being built with Vulkan and OpenGL disabled, these files are
-    # referenced directly from the remaining necessary source files.
     "src/video/cocoa/SDL_cocoaopengl.h",
     "src/video/cocoa/SDL_cocoaopengles.h",
     "src/video/cocoa/SDL_cocoavulkan.h",
+    "src/video/khronos/vulkan/vulkan_macos.h",
+    "src/video/khronos/vulkan/vulkan_metal.h",
 ]
 
 DARWIN_SOURCES = [

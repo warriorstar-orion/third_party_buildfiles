@@ -13,7 +13,6 @@ load(
 load(
     "@rules_cc//cc:defs.bzl",
     "cc_library",
-    "objc_import",
     "objc_library",
 )
 load("@wso_third_party_buildfiles//:cef.bzl", "HELPER_NAMES", "MAC_COPTS", "MAC_DEFINES")
@@ -29,46 +28,6 @@ config_setting(
 config_setting(
     name = "windows",
     values = {"cpu": "x64_windows"},
-)
-
-filegroup(
-    name = "ChromiumEmbeddedFramework_Files",
-    srcs = glob([
-        "third_party/cef/cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_macosx64/Release/Chromium Embedded Framework.framework/**",
-    ]),
-)
-
-apple_dynamic_framework_import(
-    name = "ChromiumEmbeddedFramework",
-    framework_imports = [
-        ":ChromiumEmbeddedFramework_Files",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-objc_import(
-    name = "libcef_dll_wrapper",
-    archives = [
-        "build/libcef_dll_wrapper/libcef_dll_wrapper.a",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-objc_import(
-    name = "libcef_sandbox",
-    archives = [
-        "third_party/cef/cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_macosx64/Release/cef_sandbox.a",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "cef_headers",
-    hdrs = glob(["third_party/cef/cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_macosx64/include/**/*.h"]),
-    includes = [
-        "third_party/cef/cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_macosx64/",
-    ],
-    visibility = ["//visibility:public"],
 )
 
 SHARED_COMMON_SRCS = [
@@ -107,10 +66,11 @@ objc_library(
         "AppKit",
     ],
     deps = [
-        ":cef_headers",
-        ":libcef_dll_wrapper",
-        ":libcef_sandbox",
+        "@cef_prebuilt_macos_x64//:cef_headers",
+        "@cef_prebuilt_macos_x64//:libcef_dll_wrapper_mac",
+        "@cef_prebuilt_macos_x64//:libcef_sandbox_mac",
     ],
+    visibility = ["//visibility:public"],
 )
 
 objc_library(
@@ -140,9 +100,9 @@ objc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":cef_headers",
-        ":libcef_dll_wrapper",
-        ":libcef_sandbox",
+        "@cef_prebuilt_macos_x64//:cef_headers",
+        "@cef_prebuilt_macos_x64//:libcef_dll_wrapper_mac",
+        "@cef_prebuilt_macos_x64//:libcef_sandbox_mac",
     ],
 )
 
@@ -193,10 +153,10 @@ objc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":cef_headers",
+        "@cef_prebuilt_macos_x64//:cef_headers",
+        "@cef_prebuilt_macos_x64//:libcef_dll_wrapper_mac",
+        "@cef_prebuilt_macos_x64//:libcef_sandbox_mac",
         ":examples_shared_mac",
-        ":libcef_dll_wrapper",
-        ":libcef_sandbox",
     ],
 )
 
@@ -214,11 +174,12 @@ objc_library(
         "AppKit",
     ],
     deps = [
-        ":cef_headers",
         ":examples_shared_helper",
-        ":libcef_dll_wrapper",
-        ":libcef_sandbox",
+        "@cef_prebuilt_macos_x64//:cef_headers",
+        "@cef_prebuilt_macos_x64//:libcef_dll_wrapper_mac",
+        "@cef_prebuilt_macos_x64//:libcef_sandbox_mac",
     ],
+    visibility = ["//visibility:public"],
 )
 
 apple_bundle_version(
@@ -255,7 +216,7 @@ macos_application(
     minimum_os_version = "10.15",
     version = ":HelloWorldVersion",
     deps = [
-        ":ChromiumEmbeddedFramework",
+        "@cef_prebuilt_macos_x64//:ChromiumEmbeddedFramework_AppleDynamicFramework",
         ":examples_minimal_mac",
     ],
 )

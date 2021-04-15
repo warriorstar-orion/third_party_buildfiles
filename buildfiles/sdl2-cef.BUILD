@@ -1,3 +1,6 @@
+# Donk Project
+# Copyright (c) 2021 Warriorstar Orion <orion@snowfrost.garden>
+# SPDX-License-Identifier: MIT
 load("@wso_third_party_buildfiles//:cef.bzl", "HELPER_NAMES", "MAC_COPTS", "MAC_DEFINES")
 load(
     "@build_bazel_rules_apple//apple:versioning.bzl",
@@ -9,7 +12,7 @@ load(
 )
 
 objc_library(
-    name = "sdl-cef",
+    name = "sdl-cef_mac",
     srcs = [
         "sdl-cef/sdl_cef_app.cc",
         "sdl-cef/sdl_cef_app.h",
@@ -38,13 +41,14 @@ objc_library(
     deps = [
         "@cef-project//:examples_shared_mac",
         "@cef-project//:examples_minimal_mac",
-        "@cef-project//:cef_headers",
-        "@cef-project//:libcef_dll_wrapper",
-        "@cef-project//:libcef_sandbox",
+        "@cef_prebuilt_macos_x64//:cef_headers",
+        "@cef_prebuilt_macos_x64//:libcef_dll_wrapper_mac",
+        "@cef_prebuilt_macos_x64//:libcef_sandbox_mac",
         "@sdl2",
         "@sdl2_image",
         "@spdlog",
     ],
+    visibility = ["//visibility:public"],
 )
 
 apple_bundle_version(
@@ -69,7 +73,7 @@ macos_application(
     minimum_os_version = "10.15",
     version = ":HelloWorldVersion",
     deps = [
-        ":sdl-cef",
-        "@cef-project//:ChromiumEmbeddedFramework",
+        ":sdl-cef_mac",
+        "@cef_prebuilt_macos_x64//:ChromiumEmbeddedFramework_AppleDynamicFramework",
     ],
 )

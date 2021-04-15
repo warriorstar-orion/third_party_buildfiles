@@ -1,0 +1,252 @@
+diff --git a/examples/shared/resources/mac/Info.plist b/examples/shared/resources/mac/Info.plist
+index 5639e63..2c27b5e 100644
+--- a/examples/shared/resources/mac/Info.plist
++++ b/examples/shared/resources/mac/Info.plist
+@@ -3,7 +3,7 @@
+ <plist version="1.0">
+ <dict>
+ 	<key>CFBundleDevelopmentRegion</key>
+-	<string>English</string>
++	<string>en</string>
+ 	<key>CFBundleExecutable</key>
+ 	<string>${EXECUTABLE_NAME}</string>
+ 	<key>CFBundleIconFile</key>
+diff --git a/sdl-cef/sdl_cef_app.cc b/sdl-cef/sdl_cef_app.cc
+index e34513a..f4e0201 100644
+--- a/sdl-cef/sdl_cef_app.cc
++++ b/sdl-cef/sdl_cef_app.cc
+@@ -33,9 +33,10 @@ public:
+     }
+ 
+     bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
++                                  CefRefPtr<CefFrame> frame,
+                                   CefProcessId source_process,
+                                   CefRefPtr<CefProcessMessage> message) override {
+-        return messageRouterRenderSide->OnProcessMessageReceived(browser, source_process, message);
++        return messageRouterRenderSide->OnProcessMessageReceived(browser, frame, source_process, message);
+     }
+ 
+ private:
+diff --git a/sdl-cef/sdl_cef_browser_client.cc b/sdl-cef/sdl_cef_browser_client.cc
+index f333c4a..a64732a 100644
+--- a/sdl-cef/sdl_cef_browser_client.cc
++++ b/sdl-cef/sdl_cef_browser_client.cc
+@@ -163,10 +163,11 @@ void SdlCefBrowserClient::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browse
+ }
+ 
+ bool SdlCefBrowserClient::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
++                                                   CefRefPtr<CefFrame> frame,
+                                                    CefProcessId source_process,
+                                                    CefRefPtr<CefProcessMessage> message) {
+     CEF_REQUIRE_UI_THREAD();
+ 
+-    return messageRouterBrowserSide->OnProcessMessageReceived(browser, source_process, message);
++    return messageRouterBrowserSide->OnProcessMessageReceived(browser, frame, source_process, message);
+ }
+ 
+diff --git a/sdl-cef/sdl_cef_browser_client.h b/sdl-cef/sdl_cef_browser_client.h
+index 4c53e00..d5b2844 100644
+--- a/sdl-cef/sdl_cef_browser_client.h
++++ b/sdl-cef/sdl_cef_browser_client.h
+@@ -36,6 +36,7 @@ public:
+     CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() override;
+ 
+     bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
++                                  CefRefPtr<CefFrame> frame,
+                                   CefProcessId source_process,
+                                   CefRefPtr<CefProcessMessage> message) override;
+ 
+@@ -56,7 +57,7 @@ public:
+     CefRefPtr<CefResourceHandler> GetResourceHandler(
+             CefRefPtr<CefBrowser> browser,
+             CefRefPtr<CefFrame> frame,
+-            CefRefPtr<CefRequest> request) override;
++            CefRefPtr<CefRequest> request);
+ 
+     void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
+                                    TerminationStatus status) override;
+diff --git a/sdl-cef/sdl_cef_main.cc b/sdl-cef/sdl_cef_main.mm
+similarity index 61%
+rename from sdl-cef/sdl_cef_main.cc
+rename to sdl-cef/sdl_cef_main.mm
+index 705578e..3b0d8ed 100644
+--- a/sdl-cef/sdl_cef_main.cc
++++ b/sdl-cef/sdl_cef_main.mm
+@@ -1,3 +1,55 @@
++// This file combines implementations from cef-project's examples/shared/main_mac.mm
++// And sdl2-cef's sdl_cef_main.cc in order to get the correct Cocoa environment established
++// while also initializing the SDL environment alongside the Chromium processes.
++
++// Portions copyright (c) 2017 The Chromium Embedded Framework Authors.
++// Portions copyright (c) 2010 The Chromium Authors. All rights reserved.
++// Portions copyright (c) 2008-2016 Marshall A. Greenblatt.
++// Portions copyright (c) 2006-2009 Google Inc. All rights reserved.
++//
++// Redistribution and use in source and binary forms, with or without
++// modification, are permitted provided that the following conditions are
++// met:
++//
++//    * Redistributions of source code must retain the above copyright
++// notice, this list of conditions and the following disclaimer.
++//    * Redistributions in binary form must reproduce the above
++// copyright notice, this list of conditions and the following disclaimer
++// in the documentation and/or other materials provided with the
++// distribution.
++//    * Neither the name of Google Inc. nor the name Chromium Embedded
++// Framework nor the names of its contributors may be used to endorse
++// or promote products derived from this software without specific prior
++// written permission.
++//
++// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++#import <Cocoa/Cocoa.h>
++#import "include/wrapper/cef_library_loader.h"
++#import "examples/shared/shared_application.h"
++#import "examples/shared/shared_app_delegate.h"
++
++#include <iostream>
++
++#include "SDL.h"
++#include "SDL_image.h"
++#include "include/cef_app.h"
++#include "include/cef_application_mac.h"
++#include "include/cef_browser.h"
++#include "include/wrapper/cef_helpers.h"
++
++#include "examples/shared/app_factory.h"
++#include "examples/shared/client_manager.h"
+ 
+ #include "sdl_cef_render_handler.h"
+ #include "sdl_cef_browser_client.h"
+@@ -5,14 +57,6 @@
+ #include "sdl_cef_events.h"
+ #include "stupid_background.h"
+ 
+-#include "include/cef_browser.h"
+-#include "include/cef_app.h"
+-
+-#include "SDL.h"
+-#include "SDL_image.h"
+-
+-#include <iostream>
+-
+ const int INITIAL_WINDOW_WIDTH = 1000;
+ const int INITIAL_WINDOW_HEIGHT = 1000;
+ 
+@@ -31,6 +75,11 @@ void cleanUp(SDL_Window* window = nullptr, SDL_Renderer* renderer = nullptr, boo
+ }
+ 
+ int main(int argc, char *argv[]) {
++  // Load the CEF framework library at runtime instead of linking directly
++  // as required by the macOS sandbox implementation.
++  CefScopedLibraryLoader library_loader;
++  if (!library_loader.LoadInMain())
++    return 1;
+ 
+     // CEF settings and config
+     CefMessageRouterConfig messageRouterConfig;
+@@ -44,6 +93,15 @@ int main(int argc, char *argv[]) {
+         return exitCode;
+     }
+ 
++    // Initialize the AutoRelease pool.
++    NSAutoreleasePool* autopool = [[NSAutoreleasePool alloc] init];
++
++    // Initialize the SharedApplication instance.
++    [SharedApplication sharedApplication];
++
++    // Create the singleton manager instance.
++    shared::ClientManager manager;
++
+     // Initialize Simple DirectMedia Layer
+     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+@@ -82,6 +140,11 @@ int main(int argc, char *argv[]) {
+         return -1;
+     }
+ 
++  NSObject* delegate = [[SharedAppDelegate alloc] init];
++  [delegate performSelectorOnMainThread:@selector(createApplication:)
++                             withObject:nil
++                          waitUntilDone:NO];
++
+     // create moving background image for example
+     StupidBackground background(50, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, renderer);
+ 
+@@ -103,11 +166,12 @@ int main(int argc, char *argv[]) {
+     browserSettings.background_color = 0; // allows for transparency
+ 
+     // Create the browser object to interpret the HTML
+-    std::string htmlFile = "file://" + std::string(SDL_GetBasePath()) + "sdl_cef_html.html";
++    std::string htmlFile = "file://" + std::string(SDL_GetBasePath()) + "sdl-cef/sdl_cef_html.html";
+     CefRefPtr<CefBrowser> browser = CefBrowserHost::CreateBrowserSync(window_info,
+                                                                       browserClient,
+                                                                       htmlFile,
+                                                                       browserSettings,
++                                                                      nullptr,
+                                                                       nullptr);
+ 
+     while (!browserClient->closeAllowed()) {
+@@ -151,5 +215,11 @@ int main(int argc, char *argv[]) {
+ 
+     cleanUp(window, renderer, true);
+ 
++    // Release the delegate.
++    [delegate release];
++
++    // Release the AutoRelease pool.
++    [autopool release];
++
+     return 0;
+ }
+diff --git a/sdl-cef/sdl_cef_render_handler.cc b/sdl-cef/sdl_cef_render_handler.cc
+index e108e2a..3fb98aa 100644
+--- a/sdl-cef/sdl_cef_render_handler.cc
++++ b/sdl-cef/sdl_cef_render_handler.cc
+@@ -16,9 +16,8 @@ SdlCefRenderHandler::~SdlCefRenderHandler() {
+     renderer = nullptr;
+ }
+ 
+-bool SdlCefRenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect) {
++void SdlCefRenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect) {
+     rect = CefRect(0, 0, width, height);
+-    return true;
+ }
+ 
+ void SdlCefRenderHandler::OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects,
+diff --git a/sdl-cef/sdl_cef_render_handler.h b/sdl-cef/sdl_cef_render_handler.h
+index 9a5e326..ab0a291 100644
+--- a/sdl-cef/sdl_cef_render_handler.h
++++ b/sdl-cef/sdl_cef_render_handler.h
+@@ -39,7 +39,7 @@ public:
+     void render();
+ 
+     // CefRenderHandler functions
+-    bool GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect) override;
++    void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect) override;
+ 
+     void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects,
+                  const void *buffer, int w, int h) override;
+diff --git a/sdl-cef/stupid_background.cc b/sdl-cef/stupid_background.cc
+index 790870e..c49e3a6 100644
+--- a/sdl-cef/stupid_background.cc
++++ b/sdl-cef/stupid_background.cc
+@@ -9,7 +9,7 @@ StupidBackground::StupidBackground(int count, int viewWidth, int viewHeight, SDL
+           viewHeight(viewHeight),
+           renderer(renderer) {
+ 
+-    std::string imgPath = std::string(SDL_GetBasePath()) + "stupid_background.png";
++    std::string imgPath = std::string(SDL_GetBasePath()) + "sdl-cef/stupid_background.png";
+     texture = IMG_LoadTexture(renderer, imgPath.c_str());
+ 
+     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);

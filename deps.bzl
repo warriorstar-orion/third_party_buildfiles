@@ -15,17 +15,17 @@ def wso_deps():
     http_archive(
         name = "fmtlib",
         build_file = "@wso_third_party_buildfiles//buildfiles:fmtlib.BUILD",
-        strip_prefix = "fmt-7.0.3",
-        sha256 = "decfdf9ad274070fa85f26407b816f5a4d82205ae86bac1990be658d0795ea4d",
-        urls = ["https://github.com/fmtlib/fmt/releases/download/7.0.3/fmt-7.0.3.zip"],
+        sha256 = "5d98c504d0205f912e22449ecdea776b78ce0bb096927334f80781e720084c9f",
+        strip_prefix = "fmt-7.1.3",
+        urls = ["https://github.com/fmtlib/fmt/releases/download/7.1.3/fmt-7.1.3.zip"],
     )
 
     http_archive(
         name = "spdlog",
         build_file = "@wso_third_party_buildfiles//buildfiles:spdlog.BUILD",
-        sha256 = "f0114a4d3c88be9e696762f37a7c379619443ce9d668546c61b21d41affe5b62",
-        strip_prefix = "spdlog-1.7.0",
-        urls = ["https://github.com/gabime/spdlog/archive/v1.7.0.tar.gz"],
+        sha256 = "944d0bd7c763ac721398dca2bb0f3b5ed16f67cef36810ede5061f35a543b4b8",
+        strip_prefix = "spdlog-1.8.5",
+        urls = ["https://github.com/gabime/spdlog/archive/v1.8.5.tar.gz"],
     )
 
     http_archive(
@@ -68,7 +68,7 @@ def wso_deps():
         build_file = "@wso_third_party_buildfiles//buildfiles:sdl2.BUILD",
         patch_args = ["-p1"],
         patches = [
-            "@wso_third_party_buildfiles//patches:sdl2_macosx_config.patch"
+            "@wso_third_party_buildfiles//patches:sdl2_macosx_config.patch",
         ],
         strip_prefix = "SDL2-2.0.14",
         sha256 = "2c1e870d74e13dfdae870600bfcb6862a5eab4ea5b915144aff8d75a0f9bf046",
@@ -210,6 +210,7 @@ def wso_deps():
             "@wso_third_party_buildfiles//patches:gwork_sdl2_highdpi.patch",
         ],
         strip_prefix = "GWork-gwork",
+        sha256 = "136a741120da9cb5a5d1d439f4af1d49c8858d334dccb170106be8eca91eb948",
         urls = [
             "https://github.com/billyquith/GWork/archive/refs/heads/gwork.zip",
         ],
@@ -237,5 +238,43 @@ def wso_deps():
         sha256 = "7530a966d901809fb6b6ad14e0a03424fde3a137039cbb69af9f9a11d2f662d3",
         urls = [
             "https://github.com/boost-ext/ut/archive/refs/tags/v1.1.8.zip",
+        ],
+    )
+
+    http_archive(
+        name = "cef-project",
+        build_file = "@wso_third_party_buildfiles//buildfiles:cef-project.BUILD",
+        sha256 = "49d58b3cba0fea06d205f8e2ec33e663b794a55fa85fa6a7130a244f5ed1d34c",
+        urls = [
+            "https://bitbucket.org/chromiumembedded/cef-project/get/28c07f863648.tar.gz",
+        ],
+        patch_args = ["-p1"],
+        patches = [
+            "@wso_third_party_buildfiles//patches:cef_project_macos_support.patch",
+        ],
+        strip_prefix = "chromiumembedded-cef-project-28c07f863648",
+    )
+
+    http_archive(
+        name = "cef_prebuilt_macos_x64",
+        sha256 = "81c52ded4b84270fdd5b05aba06d9996d4e32e01adf9d3199dff28d0a1c27959",
+        build_file = "@wso_third_party_buildfiles//buildfiles:cef_prebuilt.BUILD",
+        strip_prefix = "cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_macosx64",
+        urls = [
+            "https://cef-builds.spotifycdn.com/cef_binary_87.1.12%2Bg03f9336%2Bchromium-87.0.4280.88_macosx64.tar.bz2",
+        ],
+    )
+
+    http_archive(
+        name = "sdl2-cef",
+        build_file = "@wso_third_party_buildfiles//buildfiles:sdl2-cef.BUILD",
+        patch_args = ["-p1"],
+        sha256 = "d1494e56da7a43ce6418585e7298c54f8e93913c21c3072ada0e41f70f050e08",
+        patches = [
+            "@wso_third_party_buildfiles//patches:sdl-cef_base.patch",
+        ],
+        strip_prefix = "sdl2-cef-8e3dd817c88ecd05740fc7c341019db240078712",
+        urls = [
+            "https://github.com/jamethy/sdl2-cef/archive/8e3dd817c88ecd05740fc7c341019db240078712.zip",
         ],
     )
