@@ -30,4 +30,4 @@ jobs:
           path: "~/.cache/bazel"
           key: bazel      
 
-      - run: blaze build @zlib//:zlib @fmtlib//:fmtlib @spdlog//:spdlog @peglib//:peglib @libpng//:libpng @freetype//:freetype @cppcoro//:cppcoro @enet//:enet @enet-plus//:enet-plus @zpl//:zpl @librg//:librg @entt//:entt @boost_ext_ut//:boost_ext_ut
+      - run: bazel build @zlib//:zlib @fmtlib//:fmtlib @spdlog//:spdlog @peglib//:peglib @libpng//:libpng @freetype//:freetype @cppcoro//:cppcoro @enet//:enet @enet-plus//:enet-plus @zpl//:zpl @librg//:librg @entt//:entt @boost_ext_ut//:boost_ext_ut
