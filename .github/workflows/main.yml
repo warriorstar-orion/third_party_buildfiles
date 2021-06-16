@@ -1,12 +1,12 @@
 name: "Simple Libraries"
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on: ${{ matrix.os }}
-  
+
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
@@ -26,11 +26,23 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: bazelbuild/setup-bazelisk@v1.0.1
-      
-      - name: Mount bazel cache  # Optional
+
+      - name: Mount bazel cache # Optional
         uses: actions/cache@v2
         with:
           path: "~/.cache/bazel"
-          key: bazel      
+          key: bazel
 
-      - run: bazel build @zlib//:zlib @fmtlib//:fmtlib @spdlog//:spdlog @peglib//:peglib @libpng//:libpng @freetype//:freetype @cppcoro//:cppcoro @enet//:enet @enet-plus//:enet-plus @zpl//:zpl @librg//:librg @entt//:entt @boost_ext_ut//:boost_ext_ut
+      - run: bazel build @zlib//:zlib
+      - run: bazel build @fmtlib//:fmtlib
+      - run: bazel build @spdlog//:spdlog
+      - run: bazel build @peglib//:peglib
+      - run: bazel build @libpng//:libpng
+      - run: bazel build @freetype//:freetype
+      - run: bazel build @cppcoro//:cppcoro
+      - run: bazel build @enet//:enet
+      - run: bazel build @enet-plus//:enet-plus
+      - run: bazel build @zpl//:zpl
+      - run: bazel build @librg//:librg
+      - run: bazel build @entt//:entt
+      - run: bazel build @boost_ext_ut//:boost_ext_ut

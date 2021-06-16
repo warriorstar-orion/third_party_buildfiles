@@ -32,6 +32,7 @@ cc_library(
         ":darwin": [
             "unix.c",
         ],
+        "//conditions:default": [],
     }),
     hdrs = [
         "include/enet/callbacks.h",
@@ -48,6 +49,7 @@ cc_library(
         ":darwin": [
             "include/enet/unix.h",
         ],
+        "//conditions:default": [],
     }),
     strip_include_prefix = "include/",
 )
