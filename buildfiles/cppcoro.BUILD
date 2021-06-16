@@ -15,6 +15,13 @@ config_setting(
     values = {"cpu": "x64_windows"},
 )
 
+config_setting(
+    name = "linux",
+    constraint_values = [
+        "@bazel_tools//platforms:linux",
+    ],
+)
+
 cc_library(
     name = "cppcoro",
     srcs = [
@@ -156,6 +163,9 @@ cc_library(
         ":darwin": [
             "-std=c++2a",
             "-fcoroutines-ts",
+        ],
+        ":linux": [
+            "-fcoroutines",
         ],
     }),
     defines = select({
