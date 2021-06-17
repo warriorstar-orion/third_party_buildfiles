@@ -44,7 +44,6 @@ def wso_deps():
         sha256 = "7f415186d38ca71c23058386d7cf5135c8beda821ee1beecdc2a7a26c0356615",
         strip_prefix = "libpng-1.2.57",
         urls = [
-            "https://mirror.bazel.build/github.com/glennrp/libpng/archive/v1.2.57.tar.gz",
             "https://github.com/glennrp/libpng/archive/v1.2.57.tar.gz",
         ],
     )
@@ -225,6 +224,7 @@ def wso_deps():
 
     http_archive(
         name = "entt",
+        sha256 = "0d4b16d046e5f65e67b1b8b8bc2ec5547f3ee25c1b37c33c9226141e40c5ac24",
         strip_prefix = "entt-18832fcb3765e02e66b033a0cf723683762463c0",
         urls = [
             "https://github.com/skypjack/entt/archive/18832fcb3765e02e66b033a0cf723683762463c0.tar.gz",
