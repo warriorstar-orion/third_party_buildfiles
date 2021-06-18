@@ -3,6 +3,10 @@
 This repository is a collection of Bazel BUILD files for projects which
 currently do not have one.
 
+## Build Status
+
+![Simple Libraries Build Status](https://github.com/warriorstar-orion/third_party_buildfiles/actions/workflows/main.yml/badge.svg)
+
 ## Available Targets
 
 All target dependencies are resolved with targets within the repository. This
