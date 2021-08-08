@@ -23,9 +23,9 @@ def wso_deps():
     http_archive(
         name = "spdlog",
         build_file = "@wso_third_party_buildfiles//buildfiles:spdlog.BUILD",
-        sha256 = "9a452cfa24408baccc9b2bc2d421d68172a7630c99e9504a14754be840d31a62",
-        strip_prefix = "spdlog-1.9.1",
-        urls = ["https://github.com/gabime/spdlog/archive/v1.9.1.tar.gz"],
+        sha256 = "e20e6bd8f57e866eaf25a5417f0a38a116e537f1a77ac7b5409ca2b180cec0d5",
+        strip_prefix = "spdlog-1.8.2",
+        urls = ["https://github.com/gabime/spdlog/archive/v1.8.2.tar.gz"],
     )
 
     http_archive(
