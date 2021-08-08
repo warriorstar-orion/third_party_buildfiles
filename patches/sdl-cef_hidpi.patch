@@ -1,0 +1,176 @@
+diff --git a/sdl-cef/sdl_cef_render_handler.cc b/sdl-cef/sdl_cef_render_handler.cc
+index 3fb98aa..5c1e33a 100644
+--- a/sdl-cef/sdl_cef_render_handler.cc
++++ b/sdl-cef/sdl_cef_render_handler.cc
+@@ -1,66 +1,93 @@
+ #include "sdl_cef_render_handler.h"
+ #include <iostream>
++#include "spdlog/spdlog.h"
+ 
+-SdlCefRenderHandler::SdlCefRenderHandler(SDL_Renderer *renderer, int w, int h) :
+-        width(w),
+-        height(h),
+-        renderer(renderer) {
+-
+-    resize(w, h);
++SdlCefRenderHandler::SdlCefRenderHandler(SDL_Renderer* renderer, int w, int h)
++    : width(w), height(h), xPos(0), yPos(0), renderer(renderer) {
++  resize(w, h);
++  dstrect = {xPos, yPos, width, height};
+ }
+ 
+ SdlCefRenderHandler::~SdlCefRenderHandler() {
+-    if (texture) {
+-        SDL_DestroyTexture(texture);
+-    }
+-    renderer = nullptr;
++  if (texture) {
++    SDL_DestroyTexture(texture);
++  }
++  renderer = nullptr;
+ }
+ 
+-void SdlCefRenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect) {
+-    rect = CefRect(0, 0, width, height);
++void SdlCefRenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser,
++                                      CefRect& rect) {
++  rect = CefRect(0, 0, width, height);
+ }
+ 
+-void SdlCefRenderHandler::OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects,
+-                                  const void *buffer, int w, int h) {
++void SdlCefRenderHandler::OnPaint(CefRefPtr<CefBrowser> browser,
++                                  PaintElementType type,
++                                  const RectList& dirtyRects,
++                                  const void* buffer,
++                                  int w,
++                                  int h) {
++  if (w != width || h != height) {
++    resize(w, h);
++  }
+ 
+-    if (w != width || h != height) {
+-        resize(w, h);
+-    }
++  unsigned char* texture_data = nullptr;
++  int texture_pitch = 0;
++  size_t bufferSize = static_cast<size_t>(w) * static_cast<size_t>(h) * 4;
+ 
+-    unsigned char *texture_data = nullptr;
+-    int texture_pitch = 0;
+-    size_t bufferSize = static_cast<size_t>(w) * static_cast<size_t>(h) * 4;
++  paintingMutex.lock();
++  SDL_LockTexture(texture, nullptr, (void**)&texture_data, &texture_pitch);
++  memcpy(texture_data, buffer, bufferSize);
++  SDL_UnlockTexture(texture);
++  paintingMutex.unlock();
++}
+ 
+-    paintingMutex.lock();
+-    SDL_LockTexture(texture, nullptr, (void **) &texture_data, &texture_pitch);
+-    memcpy(texture_data, buffer, bufferSize);
+-    SDL_UnlockTexture(texture);
+-    paintingMutex.unlock();
++bool SdlCefRenderHandler::GetScreenInfo(CefRefPtr<CefBrowser> browser,
++                                        CefScreenInfo& screen_info) {
++  if (scalingFactorChanged) {
++    scalingFactorChanged = false;
++    screen_info.device_scale_factor = scalingFactor;
++    return true;
++  } else {
++    return false;
++  }
+ }
+ 
+-void SdlCefRenderHandler::resize(int w, int h) {
++void SdlCefRenderHandler::set_position(int x, int y) {
++  xPos = x;
++  yPos = y;
++  dstrect = {xPos, yPos, width, height};
++}
+ 
+-    paintingMutex.lock();
+-    drawingMutex.lock();
+-    if (texture) {
+-        SDL_DestroyTexture(texture);
+-    }
++void SdlCefRenderHandler::set_scaling_factor(float scaling_factor) {
++  if (scalingFactor != scaling_factor) {
++    scalingFactor = scaling_factor;
++    scalingFactorChanged = true;
++  }
++}
+ 
+-    width = w;
+-    height = h;
++void SdlCefRenderHandler::resize(int w, int h) {
++  paintingMutex.lock();
++  drawingMutex.lock();
++  if (texture) {
++    SDL_DestroyTexture(texture);
++  }
+ 
+-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, w, h);
+-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
++  width = w;
++  height = h;
++  dstrect = {xPos, yPos, width, height};
+ 
+-    paintingMutex.unlock();
+-    drawingMutex.unlock();
+-}
++  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
++                              SDL_TEXTUREACCESS_STREAMING, w, h);
++  SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+ 
++  paintingMutex.unlock();
++  drawingMutex.unlock();
++}
+ 
+ void SdlCefRenderHandler::render() {
+-    drawingMutex.lock();
+-    if (texture) {
+-        SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+-    }
+-    drawingMutex.unlock();
++  drawingMutex.lock();
++  if (texture) {
++    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
++  }
++  drawingMutex.unlock();
+ }
+diff --git a/sdl-cef/sdl_cef_render_handler.h b/sdl-cef/sdl_cef_render_handler.h
+index ab0a291..db5f5df 100644
+--- a/sdl-cef/sdl_cef_render_handler.h
++++ b/sdl-cef/sdl_cef_render_handler.h
+@@ -31,6 +31,10 @@ public:
+      */
+     void resize(int width, int height);
+ 
++    void set_position(int x, int y);
++
++    void set_scaling_factor(float scaling_factor);
++
+     /**
+      * Copies the texture to the SDL Renderer.
+      *
+@@ -44,10 +48,19 @@ public:
+     void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects,
+                  const void *buffer, int w, int h) override;
+ 
++    bool GetScreenInfo(CefRefPtr<CefBrowser> browser,
++                       CefScreenInfo& screen_info) override;
++
++
+ private:
+ 
+     int width;
+     int height;
++    int xPos;
++    int yPos;
++    float scalingFactor = 1.0f;
++    bool scalingFactorChanged = false;
++    SDL_Rect dstrect;
+     SDL_Renderer *renderer = nullptr;
+     SDL_Texture *texture = nullptr;
+     std::mutex paintingMutex;

@@ -272,6 +272,7 @@ def wso_deps():
         sha256 = "d1494e56da7a43ce6418585e7298c54f8e93913c21c3072ada0e41f70f050e08",
         patches = [
             "@wso_third_party_buildfiles//patches:sdl-cef_base.patch",
+            "@wso_third_party_buildfiles//patches:sdl-cef_hidpi.patch",
         ],
         strip_prefix = "sdl2-cef-8e3dd817c88ecd05740fc7c341019db240078712",
         urls = [
