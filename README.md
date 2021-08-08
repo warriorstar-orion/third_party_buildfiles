@@ -7,6 +7,10 @@ currently do not have one.
 
 ![Simple Libraries Build Status](https://github.com/warriorstar-orion/third_party_buildfiles/actions/workflows/main.yml/badge.svg)
 
+[![](http://github-actions.40ants.com/warriorstar-orion/third_party_buildfiles/matrix.svg)](https://github.com/warriorstar-orion/third_party_buildfiles)
+
+*Thank you to 40ants for the above GitHub Actions per-job badges.*
+
 ## Available Targets
 
 All target dependencies are resolved with targets within the repository. This
