@@ -289,3 +289,12 @@ def wso_deps():
             "https://github.com/jamethy/sdl2-cef/archive/8e3dd817c88ecd05740fc7c341019db240078712.zip",
         ],
     )
+
+    http_archive(
+        name = "tomlpp",
+        build_file = "@wso_third_party_buildfiles//buildfiles:tomlpp.BUILD",
+        urls = [
+            "https://github.com/marzer/tomlplusplus/archive/4face4d5bf16326aca0da1fb33876dbca63b6e2f.zip",
+        ],
+        strip_prefix = "tomlplusplus-4face4d5bf16326aca0da1fb33876dbca63b6e2f",
+    )
