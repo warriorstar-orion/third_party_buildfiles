@@ -5,7 +5,7 @@ load(
     "@build_bazel_rules_apple//apple:apple.bzl",
     "apple_dynamic_framework_import",
 )
-load("@wso_third_party_buildfiles//:cef.bzl", "MAC_COPTS", "MAC_DEFINES")
+load("@wso_third_party_buildfiles//:cef.bzl", "MAC_COPTS", "MAC_DEFINES", "WINDOWS_COPTS", "WINDOWS_DEFINES", "WINDOWS_LINKOPTS")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 config_setting(
@@ -362,10 +362,18 @@ cc_library(
                             LIBCEF_INCLUDE_INTERNAL_SRCS_MAC +
                             LIBCEF_INCLUDE_SRCS_MAC +
                             LIBCEF_INCLUDE_WRAPPER_SRCS_MAC,
-               "//:windows": [],
+               "//:windows": LIBCEF_INCLUDE_BASE_INTERNAL_SRCS_WINDOWS +
+                             LIBCEF_INCLUDE_INTERNAL_SRCS_WINDOWS +
+                             LIBCEF_INCLUDE_SRCS_WINDOWS,
            }),
-    copts = MAC_COPTS,
-    defines = MAC_DEFINES,
+    copts = select({
+        "//:darwin": MAC_COPTS,
+        "//:windows": WINDOWS_COPTS,
+    }),
+    defines = select({
+        "//:darwin": MAC_DEFINES,
+        "//:windows": WINDOWS_DEFINES,
+    }),
     includes = ["include"],
     visibility = ["//visibility:public"],
 )
@@ -736,7 +744,6 @@ objc_library(
     non_arc_srcs = LIBCEF_WRAPPER_SRCS_MAC_OBJC,
     visibility = ["//visibility:public"],
     deps = [":cef_headers"],
-    # alwayslink = 1,
 )
 
 cc_library(
@@ -750,8 +757,13 @@ cc_library(
            LIBCEF_WRAPPER_SRCS,
     defines = ["WRAPPING_CEF_SHARED"],
     visibility = ["//visibility:public"],
+    copts = select({
+        "//:windows": WINDOWS_COPTS,
+    }),
+    defines = select({
+        "//:windows": WINDOWS_DEFINES,
+    }),
     deps = [":cef_headers"],
-    # alwayslink = 1,
 )
 
 filegroup(

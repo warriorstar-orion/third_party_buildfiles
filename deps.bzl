@@ -258,10 +258,20 @@ def wso_deps():
     http_archive(
         name = "cef_prebuilt_macos_x64",
         sha256 = "81c52ded4b84270fdd5b05aba06d9996d4e32e01adf9d3199dff28d0a1c27959",
-        build_file = "@wso_third_party_buildfiles//buildfiles:cef_prebuilt.BUILD",
+        build_file = "@wso_third_party_buildfiles//buildfiles:cef_prebuilt_macos_x64.BUILD",
         strip_prefix = "cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_macosx64",
         urls = [
             "https://cef-builds.spotifycdn.com/cef_binary_87.1.12%2Bg03f9336%2Bchromium-87.0.4280.88_macosx64.tar.bz2",
+        ],
+    )
+
+    http_archive(
+        name = "cef_prebuilt_win_x64",
+        build_file = "@wso_third_party_buildfiles//buildfiles:cef_prebuilt_win_x64.BUILD",
+        sha256 = "8c4a9841a8e8c5866104644268b8b2281fa45974c0700b33041bce7cc92ce067",
+        strip_prefix = "cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_windows64",
+        urls = [
+            "https://cef-builds.spotifycdn.com/cef_binary_87.1.12+g03f9336+chromium-87.0.4280.88_windows64.tar.bz2",
         ],
     )
 

@@ -1,7 +1,4 @@
-load(
-    "@build_bazel_rules_apple//apple:macos.bzl",
-    "macos_application",
-)
+"""Constants for pre-built CEF libraries/headers."""
 
 HELPER_NAMES = [
     [
@@ -50,4 +47,41 @@ MAC_COPTS = [
 MAC_DEFINES = [
     "CEF_USE_SANDBOX",
     "WRAPPING_CEF_SHARED",
+]
+
+WINDOWS_COPTS = [
+    "/MP",           # Multiprocess compilation
+    "/Gy",           # Enable function-level linking
+    "/GR-",          # Disable run-time type information
+    "/W4",           # Warning level 4
+    "/WX",           # Treat warnings as errors
+    "/wd4100",       # Ignore "unreferenced formal parameter" warning
+    "/wd4127",       # Ignore "conditional expression is constant" warning
+    "/wd4244",       # Ignore "conversion possible loss of data" warning
+    "/wd4481",       # Ignore "nonstandard extension used: override" warning
+    "/wd4512",       # Ignore "assignment operator could not be generated" warning
+    "/wd4701",       # Ignore "potentially uninitialized local variable" warning
+    "/wd4702",       # Ignore "unreachable code" warning
+    "/wd4996",       # Ignore "function or variable may be unsafe" warning
+]
+
+WINDOWS_DEFINES = [
+    "WIN32",
+    "_WIN32",
+    "_WINDOWS",
+    "UNICODE",
+    "_UNICODE",
+    "WINVER=0x0601",
+    "_WIN32_WINNT=0x601",
+    "NOMINMAX",
+    "WIN32_LEAN_AND_MEAN",
+    "_HAS_EXCEPTIONS=0",
+]
+
+WINDOWS_LINKOPTS = [
+    "-DEFAULTLIB:ws2_32.lib",
+    "-DEFAULTLIB:comctl32.lib",
+    "-DEFAULTLIB:rpcrt4.lib",
+    "-DEFAULTLIB:shlwapi.lib",
+    "-DEFAULTLIB:ws2_32.lib",
 ]
